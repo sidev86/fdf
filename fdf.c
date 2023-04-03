@@ -1,4 +1,5 @@
 #include "minilibx/mlx.h"
+#include "fdf.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -78,10 +79,18 @@ void bresenham_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2
 
 void	draw_grid_points(int rows, int cols)
 {
-	int i; 
-	int j; 
+	int startx = 20; 
+	int starty = 20; 
+	int i = rows - 1;
+	int j = cols - 1; 
+
+	while (i >= 0)
+	{
+
+	}
 
 	
+		
 
 
 }
@@ -106,6 +115,28 @@ void	draw_grid_points(int rows, int cols)
 // 	}
 // }
 
+void init_grid_points(int rows, int cols)
+{
+	t_point *p;
+	t_point *cur;
+	int	i = 0; 
+	int j = 0; 
+
+	cur = p; 
+	while (i < rows)
+	{
+		while (j < cols)
+		{
+			cur = malloc(sizeof(t_point));
+			cur->x = j;
+			cur->y = i; 
+			cur->pos[0] = j * 20;
+			cur->pos[1] = i * 20; 
+		}
+	}
+}
+
+
 int	main()
 {
 	void	*mlx_ptr;
@@ -117,8 +148,8 @@ int	main()
 	
 	mlx_ptr = mlx_init(); 
 	win_ptr = mlx_new_window(mlx_ptr, 800, 600, "drawtest");
-	draw_grid(rows, cols);
-	bresenham_line(mlx_ptr, win_ptr, 500, 40, 50, 20, 0xFFFFFF);
+	//init_grid_points(rows, cols);
+	
 	mlx_loop(mlx_ptr); 
 
 }
