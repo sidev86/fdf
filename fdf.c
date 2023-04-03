@@ -33,7 +33,7 @@ void bresenham_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2
 
     if (dx < 0)
 	{
-		sx1 = -1; 
+		sx1 = -1;
 		sx2 = -1;
 	}
 	else if (dx > 0) 
@@ -77,24 +77,6 @@ void bresenham_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2
     }
 }
 
-void	draw_grid_points(int rows, int cols)
-{
-	int startx = 20; 
-	int starty = 20; 
-	int i = rows - 1;
-	int j = cols - 1; 
-
-	while (i >= 0)
-	{
-
-	}
-
-	
-		
-
-
-}
-
 // void draw_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2, int color)
 // {
 // 	double dx = x2 - x1;
@@ -115,24 +97,50 @@ void	draw_grid_points(int rows, int cols)
 // 	}
 // }
 
-void init_grid_points(int rows, int cols)
+void create_grid_point(t_point	**grid, int y, int x)
 {
-	t_point *p;
-	t_point *cur;
-	int	i = 0; 
-	int j = 0; 
+	t_point *root;
+	t_point *new;
+	t_point *curr;
 
-	cur = p; 
+	root = *grid;
+	if (y == 0 && x == 0 && !root)
+	{
+		root = malloc(sizeof(t_point));
+		root->y = y;
+		root->x = x;
+		root->pos[0] = y * 20;
+		root->pos[0] = x * 20;
+	}
+		
+	else
+	{
+		new = malloc(sizeof(t_point));
+		new->y = y;
+		new->x = x;
+		new->pos[0] = y * 20;
+		new->pos[1] = x * 20;
+		curr = root;
+		while(curr->next != NULL)
+			curr = curr->next;
+		curr->next = new;	
+	}
+	
+}
+
+void init_grid_points(t_point **grid, int rows, int cols)
+{
+	int	i = 0; 
+	int j = 0;
+	
 	while (i < rows)
 	{
 		while (j < cols)
 		{
-			cur = malloc(sizeof(t_point));
-			cur->x = j;
-			cur->y = i; 
-			cur->pos[0] = j * 20;
-			cur->pos[1] = i * 20; 
+			create_grid_point(grid, i, j);
+			j++;
 		}
+		i++;
 	}
 }
 
@@ -141,15 +149,15 @@ int	main()
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	int	posx = 100; 
 	int	i = 0; 
 	int rows = 5; 
 	int cols = 5;
-	
+	t_point	*grid;
+
+	grid = 0;
+	init_grid_points(&grid, rows, cols);
+	draw_grid_points()
 	mlx_ptr = mlx_init(); 
 	win_ptr = mlx_new_window(mlx_ptr, 800, 600, "drawtest");
-	//init_grid_points(rows, cols);
-	
-	mlx_loop(mlx_ptr); 
-
+	mlx_loop(mlx_ptr);
 }
