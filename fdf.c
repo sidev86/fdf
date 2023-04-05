@@ -2,6 +2,10 @@
 #include "fdf.h"
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 void draw_points_row(void *mlx_ptr, void *win_ptr)
 {
@@ -104,28 +108,35 @@ void create_grid_point(t_point	**grid, int y, int x)
 	t_point *curr;
 
 	root = *grid;
-	if (y == 0 && x == 0 && !root)
+	if (y == 0 && x == 0)
 	{
-		root = malloc(sizeof(t_point));
+		//printf("primo punto\n");
 		root->y = y;
 		root->x = x;
-		root->pos[0] = y * 20;
-		root->pos[0] = x * 20;
+		root->pos[0] = y * 20 + 100;
+		root->pos[1] = x * 20 + 100;
+		root->next = NULL; 
+		//printf("root pos x = %d\n", root->pos[0]);
 	}
-		
 	else
 	{
+		//printf("secondo punto\n");
 		new = malloc(sizeof(t_point));
 		new->y = y;
 		new->x = x;
-		new->pos[0] = y * 20;
-		new->pos[1] = x * 20;
-		curr = root;
+		new->pos[0] = y * 20 + 100;
+		new->pos[1] = x * 20 + 100;
+		curr = *grid;
+		
 		while(curr->next != NULL)
+		{
 			curr = curr->next;
+		}
+		//printf("curr x = %d\n", curr->x);
+		//printf("fine while\n");
 		curr->next = new;	
 	}
-	
+	//printf("fine create\n");
 }
 
 void init_grid_points(t_point **grid, int rows, int cols)
@@ -133,31 +144,139 @@ void init_grid_points(t_point **grid, int rows, int cols)
 	int	i = 0; 
 	int j = 0;
 	
-	while (i < rows)
+	while (i <= rows)
 	{
-		while (j < cols)
+		j = 0; 
+		while (j <= cols)
 		{
+			if (grid == NULL || *grid == NULL)
+				*grid = malloc(sizeof(t_point));
 			create_grid_point(grid, i, j);
 			j++;
 		}
 		i++;
 	}
+	//printf("fine init\n");
+	
+}
+
+int	*get_next_point_pos(t_point **grid, int y, int x)
+{
+	t_point *curr;
+	int		*pos;
+	curr = *grid; 
+
+	pos = malloc(sizeof(int) * 2); 
+	while(curr)
+	{
+		if(curr->y == y && curr->x == x)
+		{
+			pos[1] = curr->pos[1];
+			pos[0] = curr->pos[0];
+			break;
+		}
+		else 
+			curr = curr->next;
+	}
+	return (pos);
+}
+
+void draw_grid(void *mlx_ptr, void *win_ptr, t_point **grid, int r, int c)
+{
+	t_point *curr; 
+	int i = 0; 
+	int j = 0; 
+	int *np_pos; //next point position
+
+	curr = *grid;
+
+	while(i <= r && curr)
+	{
+		j = 0; 
+		while (j <= c && curr)
+		{
+			if (i < r)
+			{
+				np_pos = get_next_point_pos(grid, i + 1,j);
+				bresenham_line(mlx_ptr, win_ptr, curr->pos[1], curr->pos[0], np_pos[1], np_pos[0], 0xFF0000);
+			}
+			if (j < c)
+			{
+				np_pos = get_next_point_pos(grid, i ,j + 1);
+				bresenham_line(mlx_ptr, win_ptr, curr->pos[1], curr->pos[0], np_pos[1], np_pos[0], 0xFF0000);
+			}	
+			j++;	
+			curr = curr->next;
+		}
+		i++;
+	} 
+	/*printf("curr pos x = %d\n", curr->pos[1]);
+	while (curr)
+	{
+		mlx_pixel_put(mlx_ptr, win_ptr, curr->pos[1], curr->pos[0], 0xFF0000);
+		curr = curr->next; 
+	}*/
+	
+	
 }
 
 
-int	main()
+void read_map(char *path)
+{
+	int	fd;
+	int i = 0; 
+	char *maprow;
+	char **row;
+
+	fd = open(path, O_RDONLY);
+	if(fd != -1)
+	{
+		while(1)
+		{
+			maprow = get_next_line(fd);
+			if (maprow)
+			{
+				//printf("%s", maprow);
+				row = ft_split(maprow, ' ');
+				while(row[i] != 0)
+				{
+					printf("%s", row[i]);
+					i++;
+				}
+			
+				i = 0; 
+				
+
+			}
+				
+			else 
+				break; 
+
+		}
+	}
+}
+
+int	main(int argc, char **argv)
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	int	i = 0; 
-	int rows = 5; 
+	int rows = 20; 
 	int cols = 5;
+	
 	t_point	*grid;
 
-	grid = 0;
-	init_grid_points(&grid, rows, cols);
-	draw_grid_points()
-	mlx_ptr = mlx_init(); 
-	win_ptr = mlx_new_window(mlx_ptr, 800, 600, "drawtest");
-	mlx_loop(mlx_ptr);
+	if (argc == 2)
+	{
+		grid = 0;
+		mlx_ptr = mlx_init(); 
+		win_ptr = mlx_new_window(mlx_ptr, 800, 600, "drawtest");
+		
+
+		read_map(argv[1]);
+		init_grid_points(&grid, rows, cols);
+		draw_grid(mlx_ptr, win_ptr, &grid, rows, cols);
+		
+		//bresenham_line(mlx_ptr, win_ptr, 50, 50, 50, 100, 0xFF0000);
+		mlx_loop(mlx_ptr);
+	}	
 }
