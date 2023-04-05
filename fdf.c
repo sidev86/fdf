@@ -190,6 +190,8 @@ void draw_grid(void *mlx_ptr, void *win_ptr, t_point **grid, int r, int c)
 
 	curr = *grid;
 
+	printf ("r = %d c = %d\n", r, c);
+
 	while(i <= r && curr)
 	{
 		j = 0; 
@@ -221,60 +223,65 @@ void draw_grid(void *mlx_ptr, void *win_ptr, t_point **grid, int r, int c)
 }
 
 
-void read_map(char *path)
+int	*read_map(char *path)
 {
 	int	fd;
-	int i = 0; 
+	int r = 0;
+	int c = 0; 
 	char *maprow;
 	char **row;
+	int *g_size;
 
 	fd = open(path, O_RDONLY);
 	if(fd != -1)
 	{
+		g_size = malloc(sizeof(int) * 2);
 		while(1)
 		{
 			maprow = get_next_line(fd);
 			if (maprow)
 			{
-				//printf("%s", maprow);
 				row = ft_split(maprow, ' ');
-				while(row[i] != 0)
+				while(row[c] != 0)
 				{
-					printf("%s", row[i]);
-					i++;
+					printf("%s ", row[c]);
+					c++;
 				}
-			
-				i = 0; 
-				
-
+				g_size[0] = c;
+				r++;
+				c = 0; 
 			}
-				
-			else 
-				break; 
-
+			else
+			{
+				g_size[1] = r;
+				printf("row size = %d cols size = %d\n", g_size[1], g_size[0]);
+				close(fd);
+				return (g_size);
+			}		
 		}
 	}
+	return (g_size);
 }
 
 int	main(int argc, char **argv)
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	int rows = 20; 
-	int cols = 5;
+	int		*matrix_size;
 	
 	t_point	*grid;
 
+	
 	if (argc == 2)
 	{
-		grid = 0;
+		
 		mlx_ptr = mlx_init(); 
 		win_ptr = mlx_new_window(mlx_ptr, 800, 600, "drawtest");
-		
-
-		read_map(argv[1]);
-		init_grid_points(&grid, rows, cols);
-		draw_grid(mlx_ptr, win_ptr, &grid, rows, cols);
+		matrix_size = read_map(argv[1]);
+		printf("rows = %d cols = %d\n", matrix_size[1], matrix_size[0]);
+		grid = 0;
+		init_grid_points(&grid, 20, 20);
+		//draw_grid(mlx_ptr, win_ptr, &grid, 20, 20);
 		
 		//bresenham_line(mlx_ptr, win_ptr, 50, 50, 50, 100, 0xFF0000);
 		mlx_loop(mlx_ptr);
