@@ -14,7 +14,7 @@
 #include <stddef.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 10
 #endif
 
 static void	ft_read_buf(char **str, char *buf, int fd)
