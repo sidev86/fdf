@@ -1,4 +1,4 @@
-#include "minilibx/mlx.h"
+#include "mlx_linux/mlx.h"
 #include "fdf.h"
 #include <math.h>
 #include <stdlib.h>
@@ -115,12 +115,13 @@ void create_grid_point(t_point	**grid, int y, int x)
 		new->pos[2] = 10; 
 		curr = *grid;
 		
-		while(curr->next != NULL)
+		while(curr->next)
 			curr = curr->next;
 		
 		//printf("curr x = %d\n", curr->x);
 		//printf("fine while\n");
 		curr->next = new;	
+		new->next = NULL;
 	}
 	//printf("fine create\n");
 }
@@ -215,7 +216,8 @@ int	*read_map(char *path)
 	char *maprow;
 	char **row;
 	int *g_size;
-
+	
+	g_size = 0;
 	fd = open(path, O_RDONLY);
 	if(fd != -1)
 	{
@@ -283,19 +285,19 @@ void iso_point(t_point **grid, int y, int x)
 	set_point_pos(grid, y, x, point);
 }
 
-void rotation_x(t_point **grid, t_point *p, int theta)
+void rotation_x(t_point *p, int theta)
 {
 	p->pos[1] = p->pos[1] * cos(theta) + p->pos[2] * sin(theta);
 	p->pos[2] = -p->pos[1] * sin(theta) + p->pos[2] * cos(theta);
 }
 
-void rotation_y(t_point **grid, t_point *p, int theta)
+void rotation_y(t_point *p, int theta)
 {
 	p->pos[0] = p->pos[0] * cos(theta) + p->pos[2] * sin(theta); 
 	p->pos[2] = -p->pos[0] * sin(theta) + p->pos[2] * cos(theta);
 }
 
-void rotation_z(t_point **grid, t_point *p, int theta)
+void rotation_z(t_point *p, int theta)
 {
 	p->pos[0] = p->pos[0] * cos(theta) - p->pos[1] * sin(theta);
 	p->pos[1] = p->pos[0] * sin(theta) + p->pos[1] * cos(theta); 
@@ -312,7 +314,7 @@ void isometric_view(t_point **grid, int rows, int cols)
 		{
 			if (grid == NULL || *grid == NULL)
 				*grid = malloc(sizeof(t_point));
-			rotation_x(grid, get_point_at_coord(grid, i, j), -90);
+			//rotation_x(grid, get_point_at_coord(grid, i, j), -90);
 			//rotation_y(grid, get_point_at_coord(grid, i, j), 30);
 			//rotation_z(grid, get_point_at_coord(grid, i, j), 0);
 			iso_point(grid, i, j);
@@ -342,9 +344,8 @@ int	main(int argc, char **argv)
 		//printf("rows = %d cols = %d\n", matrix_size[1], matrix_size[0]);
 		
 		init_grid_points(&grid, matrix_size[1], matrix_size[0]);
-		//isometric_view(&grid, matrix_size[1], matrix_size[0]);
+		isometric_view(&grid, matrix_size[1], matrix_size[0]);
 		draw_grid(mlx_ptr, win_ptr, &grid, matrix_size[1], matrix_size[0]);
-		
 		//bresenham_line(mlx_ptr, win_ptr, 50, 50, 50, 100, 0xFF0000);
 		mlx_loop(mlx_ptr);
 	}	
