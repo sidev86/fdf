@@ -1,4 +1,4 @@
-#include "mlx/mlx.h"
+#include "mlx_linux/mlx.h"
 #include "fdf.h"
 #include <math.h>
 #include <stdlib.h>
@@ -216,6 +216,7 @@ void init_map_points(t_point ***points_map, t_altitudes **alt, int rows, int col
 	int dist = 20; 
 	//printf("%p\n", alt);
 	//printf("rws: %d\n", rows);
+
 	if (cols > rows)
 		dist = 500 / cols; 
 	else 
@@ -233,8 +234,9 @@ void init_map_points(t_point ***points_map, t_altitudes **alt, int rows, int col
 		j = 0; 
 		while (j < cols)
 		{
-			(*points_map)[i][j].pos[1] = i * dist; 
+
 			(*points_map)[i][j].pos[0] = j * dist; 
+			(*points_map)[i][j].pos[1] = i * dist; 
 			(*points_map)[i][j].pos[2] = get_altitude_value(alt, i, j);
 		
 			j++;
@@ -247,10 +249,11 @@ void draw_map(void *mlx_ptr, void *win_ptr, t_point ***points_map, int r, int c)
 {
 
 	int i = 0; 
-	int j = 0; 
+	int j = 0;
 	int x_offset = 450; 
 	int y_offset = 300;
 
+	
 	while(i < r)
 	{
 		j = 0; 
@@ -276,9 +279,9 @@ int key_pressed(int keycode, t_vars **vars)
 {
 	printf("Hai premuto il tasto %d\n", keycode);
 
-	if (keycode == 8)
+	if (keycode == 99)
 		mlx_clear_window((*vars)->mlx, (*vars)->win);
-	else if (keycode == 53)
+	else if (keycode == 65307)
 	{
 		mlx_destroy_window((*vars)->mlx, (*vars)->win);
 		exit(0); 
@@ -286,53 +289,54 @@ int key_pressed(int keycode, t_vars **vars)
 	return (0); 
 }
 
-int mouse_pressed(int mousecode,int x, int y, t_camera **cam)
+
+int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 {
 	
 	printf("x = %d\n", x);
 	printf("y = %d\n", y);
+	printf("Hai premuto il tasto %d\n", mousecode);
 	if(mousecode == 4){
 		
 		
-		(*cam)->zoom++;
-		printf("Camera zoom level = %d\n", (*cam)->zoom);
+		(*fdf)->cam->zoom++;
+		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
+		
+
 	}
 	else if (mousecode == 5)
 	{
-		(*cam)->zoom--;
-		printf("Camera zoom level = %d\n", (*cam)->zoom);
+		(*fdf)->cam->zoom--;
+		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
 	}
-		
 	else if (mousecode == 1)
 		printf("Left Click\n");
-	return(0); 
+	return (0); 
 }
 
 int	main(int argc, char **argv)
 {
-	t_vars *vars; 
 	
-	//t_fdf *fdf; 
+	t_fdf *fdf;
 	t_point	**points_map;
 	t_map	*map;
 	t_altitudes *alt; 
-	t_camera *cam; 
 
 	if (argc == 2)
 	{
+		fdf = malloc(sizeof(t_fdf)); 
 		map = malloc(sizeof(t_map));
-		vars = malloc(sizeof(t_vars)); 
-		cam = malloc(sizeof(t_camera)); 
-		cam->zoom = 1; 
+		fdf->cam = malloc(sizeof(t_camera)); 
+		fdf->cam->zoom = 1;
 		points_map = 0;
-		printf("Camera zoomy level = %d\n", cam->zoom);
+		printf("Camera zoomy level = %d\n", fdf->cam->zoom);
 		//printf("%p\n", points_map);
 		alt = 0; 
-		vars->mlx = mlx_init(); 
+		fdf->mlx = mlx_init(); 
 		printf("%s\n", argv[1]);
 		
 		read_map(argv[1], &map, &alt);
-		vars->win  = mlx_new_window(vars->mlx, 1024, 768, "drawtest");
+		fdf->win  = mlx_new_window(fdf->mlx, 1024, 768, "drawtest");
 		//printf("%p\n", vars->win);
 		
 		
@@ -340,11 +344,15 @@ int	main(int argc, char **argv)
 		
 		init_map_points(&points_map, &alt, map->height, map->width);
 		isometric_view(&points_map, map->height, map->width);
-		draw_map(vars->mlx, vars->win, &points_map, map->height, map->width);
-		mlx_clear_window(vars->mlx, vars->win);
-		mlx_hook(vars->win, 2, 0, key_pressed, &vars);
-		mlx_hook(vars->win, 4, 0, mouse_pressed, &cam); 
+		draw_map(fdf->mlx, fdf->win, &points_map, map->height, map->width);
+		//mlx_clear_window(vars->mlx, vars->win);
+		mlx_hook(fdf->win, 2, (1L<<0), key_pressed, &fdf);
+		mlx_hook(fdf->win, 4, (1L<<2), mouse_pressed, &fdf);
 		
-		mlx_loop(vars->mlx);
+		//hook function MAC ver.
+		/*mlx_hook(vars->win, 2, (1L<<0), key_pressed, &vars);
+		mlx_hook(vars->win, 4, (1L<<2), mouse_pressed, &cam);*/  
+		
+		mlx_loop(fdf->mlx);
 	}	
 }
