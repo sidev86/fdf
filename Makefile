@@ -14,10 +14,10 @@ FLAGS    := -Wall -Wextra -Werror
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        :=      get_next_line.c \
-                          ft_split.c \
+SRCS        :=      get_next_line_utils.c \
                           fdf.c \
-                          get_next_line_utils.c \
+                          get_next_line.c \
+                          ft_split.c \
                           
 OBJS        := $(SRCS:.c=.o)
 
@@ -51,7 +51,7 @@ endif
 ifeq ($(UNAME), Linux)
 $(NAME): ${OBJS}
 			@echo "$(GREEN)Linux compilation ${CLR_RMV}of ${YELLOW}$(NAME) ${CLR_RMV}..."
-			#@chmod 777 mlx_linux/configure
+			@chmod 777 mlx_linux/configure
 			@ $(MAKE) -C mlx_linux all
 			$(CC) $(CFLAGS) -g3 -o $(NAME) $(OBJS) -Imlx_linux -Lmlx_linux -lmlx -lmlx_Linux -L/usr/lib -lXext -lX11 -lm
 			@echo "$(GREEN)$(NAME) created[0m ✔️"
