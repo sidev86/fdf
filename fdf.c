@@ -30,7 +30,7 @@ void rotation_z(t_point *p, int theta)
 {
 	p->pos[0] = p->pos[0] * cos(theta) - p->pos[1] * sin(theta);
 	p->pos[1] = p->pos[0] * sin(theta) + p->pos[1] * cos(theta); 
-}*/
+}*/   
 
 void pixel_put(t_fdf **fdf, int x, int y, int color)
 {
