@@ -1,14 +1,5 @@
 #include "get_next_line.h"
 
-char	**ft_split(char const *s, char c);
-
-typedef struct s_vars
-{
-	void	*mlx; 
-	void	*win; 
-}				t_vars; 
-
-
 typedef struct	s_point
 {
 	int	x;
@@ -34,14 +25,30 @@ typedef struct s_altitudes
 typedef struct s_camera
 {
 	int zoom; 
+	double alpha;
+	double beta;
+	double gamma; 
+	int iso_active; 
 }				t_camera; 
 
+typedef struct s_img
+{
+	void	*mlx_img; 
+	int		bpp; 
+	int		line_width; 
+	int		endian; 
+}				t_img; 
 
 typedef struct s_fdf
 {
 	void *mlx; 
 	void *win; 
+	char *data_addr;
+	struct s_point **points_map;
 	struct s_camera *cam; 
 	struct s_map *map; 
+	struct s_img *img; 
+	
 }			t_fdf; 
 
+char	**ft_split(char const *s, char c);

@@ -8,16 +8,16 @@
 ################################################################################
 
 NAME        := fdf
-CC        := gcc -g -Wall -Wextra -Werror
-FLAGS    := -Wall -Wextra -Werror 
+CC        := gcc -g
+FLAGS    := 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        :=      get_next_line.c \
-                          ft_split.c \
+SRCS        :=      get_next_line_utils.c \
                           fdf.c \
-                          get_next_line_utils.c \
+                          get_next_line.c \
+                          ft_split.c \
                           
 OBJS        := $(SRCS:.c=.o)
 

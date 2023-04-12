@@ -1,4 +1,4 @@
-#include "mlx_linux/mlx.h"
+#include "mlx/mlx.h"
 #include "fdf.h"
 #include <math.h>
 #include <stdlib.h>
@@ -7,13 +7,20 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-/*void rotation_x(t_point *p, int theta)
+#define		W_WIDTH	1024
+#define		W_HEIGHT 768
+
+void rotation_x(t_point *p, int alpha)
 {
-	p->pos[1] = p->pos[1] * cos(theta) + p->pos[2] * sin(theta);
-	p->pos[2] = -p->pos[1] * sin(theta) + p->pos[2] * cos(theta);
+	int previous_y;
+
+	previous_y = p->pos[0];
+	p->pos[0] = previous_y * cos(alpha) + p->pos[2] * sin(alpha);
+	p->pos[2] = -previous_y * sin(alpha) + p->pos[2] * cos(alpha);
+	
 }
 
-void rotation_y(t_point *p, int theta)
+/*void rotation_y(t_point *p, int theta)
 {
 	p->pos[0] = p->pos[0] * cos(theta) + p->pos[2] * sin(theta); 
 	p->pos[2] = -p->pos[0] * sin(theta) + p->pos[2] * cos(theta);
@@ -25,8 +32,27 @@ void rotation_z(t_point *p, int theta)
 	p->pos[1] = p->pos[0] * sin(theta) + p->pos[1] * cos(theta); 
 }*/
 
-
-void bresenham_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2, int color)
+void pixel_put(t_fdf **fdf, int x, int y, int color)
+{
+	char	*pixel; 
+	int		i;
+	
+	if (x >= 0 && x < W_WIDTH && y >= 0 && y < W_HEIGHT)
+	{
+		i = (*fdf)->img->bpp - 8; 
+		pixel = (*fdf)->data_addr + (y * (*fdf)->img->line_width + x * ((*fdf)->img->bpp / 8));
+		while(i >= 0)
+		{
+			if ((*fdf)->img->endian != 0)
+				*pixel++ = (color >> i) & 0xFF;
+			else
+				*pixel++ = (color >> ((*fdf)->img->bpp - 8 - i)) & 0xFF;
+			i -= 8; 
+		}
+	}
+	
+}
+void bresenham_line(t_fdf **fdf, int x1, int y1, int x2, int y2, int color)
 {
     int dx = x2 - x1 ;
     int dy = y2 - y1 ;
@@ -62,7 +88,7 @@ void bresenham_line(void *mlx_ptr, void *win_ptr, int x1, int y1, int x2, int y2
     int	numerator = longest >> 1;
     while (i <= longest) 
 	{
-        mlx_pixel_put(mlx_ptr, win_ptr, x1, y1, color);
+       	pixel_put(fdf, x1, y1, color);
         numerator += shortest;
         if (numerator > longest) 
 		{
@@ -159,7 +185,7 @@ void iso_point(t_point ***points_map, int y, int x)
 	int y_prev;
 
 	x_prev = (*points_map)[y][x].pos[0];
-	y_prev =(*points_map)[y][x].pos[1];
+	y_prev = (*points_map)[y][x].pos[1];
 
 	(*points_map)[y][x].pos[1] = (x_prev - y_prev) * cos(0.523599);
 	(*points_map)[y][x].pos[0] = (x_prev + y_prev) * sin(0.523599) + (*points_map)[y][x].pos[2]; 
@@ -213,14 +239,14 @@ void init_map_points(t_point ***points_map, t_altitudes **alt, int rows, int col
 {
 	int	i = 0; 
 	int j = 0;
-	int dist = 20; 
+	int dist = 50; 
 	//printf("%p\n", alt);
 	//printf("rws: %d\n", rows);
-
-	if (cols > rows)
+	
+	/*if (cols > rows)
 		dist = 500 / cols; 
 	else 
-		dist = 500 / rows; 
+		dist = 500 / rows; */
 	*points_map = (t_point **)malloc(sizeof(t_point *) * rows); 
 	while (i < rows)
 	{
@@ -238,6 +264,8 @@ void init_map_points(t_point ***points_map, t_altitudes **alt, int rows, int col
 			(*points_map)[i][j].pos[0] = j * dist; 
 			(*points_map)[i][j].pos[1] = i * dist; 
 			(*points_map)[i][j].pos[2] = get_altitude_value(alt, i, j);
+
+			printf("point pos[0] = %d\n", (*points_map)[i][j].pos[0]);
 		
 			j++;
 		}
@@ -245,7 +273,24 @@ void init_map_points(t_point ***points_map, t_altitudes **alt, int rows, int col
 	}
 }
 
-void draw_map(void *mlx_ptr, void *win_ptr, t_point ***points_map, int r, int c)
+void draw_background(t_fdf **fdf, int color)
+{
+	int i; 
+	int	j; 
+
+	i = 0; 
+	while (i < W_HEIGHT)
+	{
+		j = 0;
+		while (j < W_WIDTH)
+		{
+			pixel_put(fdf, j++, i, color);
+		}
+		++i;
+	}
+}
+
+void draw_map(t_fdf **fdf, t_point ***points_map, int r, int c)
 {
 
 	int i = 0; 
@@ -253,39 +298,60 @@ void draw_map(void *mlx_ptr, void *win_ptr, t_point ***points_map, int r, int c)
 	int x_offset = 450; 
 	int y_offset = 300;
 
-	
+	mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+	draw_background(fdf, 0x000010); 
+
 	while(i < r)
 	{
 		j = 0; 
 		while (j < c)
 		{
-			if (i < r-1)
+			rotation_x(&(*fdf)->points_map[i][j] , (*fdf)->cam->alpha);
+			printf("cam alphazzz = %f\n", (*fdf)->cam->alpha);
+			//printf("pointttt = %d\n", (*points_map)[i][j].pos[0]);
+			//(*points_map)[i][j].pos[1] = (*points_map)[i][j].pos[1] * cos((*fdf)->cam->alpha) + (*points_map)[i][j].pos[2] * sin((*fdf)->cam->alpha);
+			//(*points_map)[i][j].pos[2]  = -(*points_map)[i][j].pos[1]* sin((*fdf)->cam->alpha) + (*points_map)[i][j].pos[2] * cos((*fdf)->cam->alpha);
+			if (i < r - 1)
 			{
-				bresenham_line(mlx_ptr, win_ptr, (*points_map)[i][j].pos[1]+x_offset, (*points_map)[i][j].pos[0]+ y_offset, (*points_map)[i+1][j].pos[1]+x_offset,(*points_map)[i+1][j].pos[0]+y_offset, 0xFFFFFF);
+				bresenham_line(fdf, (*points_map)[i][j].pos[1]* (*fdf)->cam->zoom + x_offset, (*points_map)[i][j].pos[0]* (*fdf)->cam->zoom + y_offset, (*points_map)[i+1][j].pos[1]*(*fdf)->cam->zoom +x_offset,(*points_map)[i+1][j].pos[0]*(*fdf)->cam->zoom +y_offset, 0xFFFFFF);
 			}
-			if (j < c-1)
+			if (j < c - 1)
 			{
-				bresenham_line(mlx_ptr, win_ptr, (*points_map)[i][j].pos[1]+x_offset, (*points_map)[i][j].pos[0]+ y_offset, (*points_map)[i][j+1].pos[1]+x_offset,(*points_map)[i][j+1].pos[0]+y_offset, 0xFFFFFF);
+				bresenham_line(fdf, (*points_map)[i][j].pos[1]*(*fdf)->cam->zoom +x_offset, (*points_map)[i][j].pos[0]*(*fdf)->cam->zoom+ y_offset, (*points_map)[i][j+1].pos[1]*(*fdf)->cam->zoom+x_offset,(*points_map)[i][j+1].pos[0]*(*fdf)->cam->zoom+y_offset, 0xFFFFFF);
 			}		
 			j++;
 		}
 		i++;
-	} 
-	//mlx_put_image_to_window(mlx_ptr, win_ptr, img_ptr, 0, 0);
+	}
+
+	mlx_put_image_to_window((*fdf)->mlx, (*fdf)->win, (*fdf)->img->mlx_img, 0, 0);
 
 }
 
-int key_pressed(int keycode, t_vars **vars)
+void rotate(t_fdf **fdf, int key)
+{
+	if(key == 2)
+	 	(*fdf)->cam->alpha += 0.05; 
+	else if (key == 0)
+		(*fdf)->cam->alpha -= 0.05; 
+	printf ("cam alpha angle = %f", (*fdf)->cam->alpha);
+}
+
+int key_pressed(int keycode, t_fdf **fdf)
 {
 	printf("Hai premuto il tasto %d\n", keycode);
 
-	if (keycode == 99)
-		mlx_clear_window((*vars)->mlx, (*vars)->win);
-	else if (keycode == 65307)
+	if (keycode == 8) //linux -> 99
+		mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+	else if (keycode == 2 || keycode == 0)
+		rotate(fdf, keycode); 
+	else if (keycode == 53) //linux -> 65307
 	{
-		mlx_destroy_window((*vars)->mlx, (*vars)->win);
+		mlx_destroy_window((*fdf)->mlx, (*fdf)->win);
 		exit(0); 
 	}
+	mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+	draw_map(fdf, &(*fdf)->points_map, (*fdf)->map->height, (*fdf)->map->width);
 	return (0); 
 }
 
@@ -293,66 +359,69 @@ int key_pressed(int keycode, t_vars **vars)
 int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 {
 	
-	printf("x = %d\n", x);
-	printf("y = %d\n", y);
+	//printf("x = %d\n", x);
+	//printf("y = %d\n", y);
+	x++;
+	y++;
 	printf("Hai premuto il tasto %d\n", mousecode);
 	if(mousecode == 4){
 		
-		
-		(*fdf)->cam->zoom++;
-		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
-		
+		if ((*fdf)->cam->zoom < 40)
+			(*fdf)->cam->zoom++;
+		//printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
+		mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+		draw_map(fdf, &(*fdf)->points_map, (*fdf)->map->height, (*fdf)->map->width);
 
 	}
 	else if (mousecode == 5)
 	{
-		(*fdf)->cam->zoom--;
-		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
+		if ((*fdf)->cam->zoom > 1)
+			(*fdf)->cam->zoom--;
+		mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+		draw_map(fdf, &(*fdf)->points_map, (*fdf)->map->height, (*fdf)->map->width);
+		//printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
 	}
 	else if (mousecode == 1)
 		printf("Left Click\n");
 	return (0); 
 }
 
+
 int	main(int argc, char **argv)
 {
-	
 	t_fdf *fdf;
-	t_point	**points_map;
-	t_map	*map;
+	//t_point	**points_map;
 	t_altitudes *alt; 
 
 	if (argc == 2)
 	{
 		fdf = malloc(sizeof(t_fdf)); 
-		map = malloc(sizeof(t_map));
+		fdf->map = malloc(sizeof(t_map));
 		fdf->cam = malloc(sizeof(t_camera)); 
+		fdf->img = malloc(sizeof(t_img));
 		fdf->cam->zoom = 1;
-		points_map = 0;
+		fdf->cam->alpha = 0; 
+		fdf->points_map = 0;
 		printf("Camera zoomy level = %d\n", fdf->cam->zoom);
 		//printf("%p\n", points_map);
 		alt = 0; 
 		fdf->mlx = mlx_init(); 
 		printf("%s\n", argv[1]);
 		
-		read_map(argv[1], &map, &alt);
-		fdf->win  = mlx_new_window(fdf->mlx, 1024, 768, "drawtest");
-		//printf("%p\n", vars->win);
-		
-		
-		printf("rows = %d cols = %d\n", map->height, map->width);
-		
-		init_map_points(&points_map, &alt, map->height, map->width);
-		isometric_view(&points_map, map->height, map->width);
-		draw_map(fdf->mlx, fdf->win, &points_map, map->height, map->width);
-		//mlx_clear_window(vars->mlx, vars->win);
+		read_map(argv[1], &fdf->map, &alt);
+		fdf->win  = mlx_new_window(fdf->mlx, W_WIDTH, W_HEIGHT, "drawtest");
+		fdf->img->mlx_img = mlx_new_image(fdf->mlx, W_WIDTH, W_HEIGHT);
+		fdf->data_addr = mlx_get_data_addr(fdf->img->mlx_img, &(fdf->img->bpp), &(fdf->img->line_width), &(fdf->img->endian));
+		printf("rows = %d cols = %d\n", fdf->map->height, fdf->map->width);
+		printf("img addr = %p\n",fdf->data_addr);
+		init_map_points(&fdf->points_map, &alt, fdf->map->height, fdf->map->width);
+		isometric_view(&fdf->points_map, fdf->map->height, fdf->map->width);
+		draw_map(&fdf, &fdf->points_map, fdf->map->height, fdf->map->width);
 		mlx_hook(fdf->win, 2, (1L<<0), key_pressed, &fdf);
 		mlx_hook(fdf->win, 4, (1L<<2), mouse_pressed, &fdf);
-		
-		//hook function MAC ver.
-		/*mlx_hook(vars->win, 2, (1L<<0), key_pressed, &vars);
-		mlx_hook(vars->win, 4, (1L<<2), mouse_pressed, &cam);*/  
-		
 		mlx_loop(fdf->mlx);
+		mlx_destroy_image(fdf->mlx, fdf->img->mlx_img);
+		mlx_destroy_window(fdf->mlx, fdf->win);
+		free(fdf->mlx);
 	}	
 }
