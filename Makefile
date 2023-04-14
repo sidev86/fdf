@@ -8,16 +8,21 @@
 ################################################################################
 
 NAME        := fdf
-CC        := gcc -g
-FLAGS    := 
+CC        := gcc
+FLAGS    := -Wall -Wextra -Werror -g
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
-SRCS        :=      get_next_line_utils.c \
+SRCS        :=      draw_map.c \
+                          get_next_line_utils.c \
+                          read_map.c \
+                          init.c \
                           fdf.c \
                           get_next_line.c \
                           ft_split.c \
+                          projection.c \
+                          errors.c \
                           
 OBJS        := $(SRCS:.c=.o)
 
