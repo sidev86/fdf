@@ -40,12 +40,10 @@ int	get_altitude_value(t_altitudes **alt, int y, int x)
 	t_altitudes *curr; 
 
 	curr = *alt; 
-	printf("curr alt = %d\n",curr->height);
 	while(curr)
 	{
 		if(curr->y == y && curr->x == x)
 		{
-			printf("trovata altitudine!\n");
 			return(curr->height);
 		}
 		else
@@ -53,8 +51,6 @@ int	get_altitude_value(t_altitudes **alt, int y, int x)
 	}
 	return(0); 
 }
-
-
 
 
 void change_camera_angle(t_fdf **fdf, int key)
@@ -98,7 +94,7 @@ int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 		if ((*fdf)->cam->zoom < 40)
 			(*fdf)->cam->zoom++;
 		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
-		mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+		//mlx_clear_window((*fdf)->mlx, (*fdf)->win);
 		draw_map(*fdf, (*fdf)->map);
 
 	}
@@ -106,7 +102,7 @@ int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 	{
 		if ((*fdf)->cam->zoom > 1)
 			(*fdf)->cam->zoom--;
-		mlx_clear_window((*fdf)->mlx, (*fdf)->win);
+		//mlx_clear_window((*fdf)->mlx, (*fdf)->win);
 		draw_map(*fdf, (*fdf)->map);
 		//draw_map(fdf, &(*fdf)->points_map, (*fdf)->map->height, (*fdf)->map->width);
 		printf("Camera zoom level = %d\n", (*fdf)->cam->zoom);
@@ -131,15 +127,12 @@ int	main(int argc, char **argv)
 		alt = 0;  
 		if (read_map(argv[1], &map, &alt) == -1)
 			error_message();
-		
-		printf("Hai finito di leggere??\n");
+		//printf("Hai finito di leggere??\n");
 		fdf = init_fdf(map);
 		fdf->cam = init_camera(fdf);
 		fdf->alt = alt;
 		 
 		printf("%s\n", argv[1]);
-		//init_map_points(&fdf->points_map, &alt, fdf->map->height, fdf->map->width);
-		//isometric_view(&fdf->points_map, fdf->map->height, fdf->map->width);
 		draw_map(fdf, fdf->map);
 		
 		mlx_hook(fdf->win, 2, (1L<<0), key_pressed, &fdf);

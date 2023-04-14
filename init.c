@@ -15,18 +15,18 @@ t_map   *init_map(void)
 t_fdf   *init_fdf(t_map *map)
 {
     t_fdf   *fdf; 
-    printf("init fdf\n");
+    //printf("init fdf\n");
     fdf = malloc(sizeof(t_fdf));
    
     if (!fdf)
         error_message();
     fdf->mlx = mlx_init();
     fdf->win = mlx_new_window(fdf->mlx, W_WIDTH, W_HEIGHT, "Fdf");
-      printf("qui vaaa?\n");
+    //printf("qui vaaa?\n");
     fdf->img = mlx_new_image(fdf->mlx, W_WIDTH, W_HEIGHT);
     fdf->map = map;
     fdf->data_addr = mlx_get_data_addr(fdf->img, &(fdf->bpp), &(fdf->line_width), &(fdf->endian));
-   
+    
     return(fdf);
 }
 

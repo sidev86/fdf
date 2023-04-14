@@ -48,7 +48,7 @@ t_point     projection(t_point p, t_fdf *fdf)
     p.z *= fdf->cam->zoom / 2;
     p.x -= (fdf->cam->zoom * fdf->map->width) / 2; 
     p.y -= (fdf->cam->zoom * fdf->map->height) / 2; 
-    rotation_x(&p.y, &p.z, fdf->cam->alpha);
+	rotation_x(&p.y, &p.z, fdf->cam->alpha);
     rotation_y(&p.x, &p.z, fdf->cam->beta);
     rotation_z(&p.x, &p.y, fdf->cam->gamma);
     //if (fdf->cam->iso_active == 1)
