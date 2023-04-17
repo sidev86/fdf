@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-void    terminate(t_fdf **fdf)
+int   terminate(t_fdf **fdf)
 {
         free((*fdf)->map->alt_arr);
 		free((*fdf)->map->color_arr);

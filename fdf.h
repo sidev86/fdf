@@ -1,8 +1,8 @@
 #ifndef FDF_H
 # define FDF_H
 
-# define		W_WIDTH 1024
-# define		W_HEIGHT 768
+# define		W_WIDTH 1920
+# define		W_HEIGHT 1080
 # define		M_WIDTH  250
 
 # define 	COLOR_1  0X009387
@@ -122,6 +122,6 @@ void change_gradient_values(t_fdf **fdf);
 int	get_default_color(int z, t_map *map);
 void	print_menu(t_fdf *fdf);
 void change_projection(t_fdf **fdf, int key);
-void    terminate(t_fdf **fdf);
+int    terminate(t_fdf **fdf);
 
 #endif

@@ -25,7 +25,7 @@ static int key_pressed(int keycode, t_fdf **fdf)
 static int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 {
 	(void)x;
-    (void)y;
+    	(void)y;
 	printf("Hai premuto il tasto %d\n", mousecode);
 	if(mousecode == 4){
 		
@@ -49,14 +49,9 @@ static int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 	return (0); 
 }
 
-/*static void close_window(t_fdf **fdf)
-{
-	terminate(fdf);
-}*/
-
 void   input_controls(t_fdf **fdf)
 {
-    mlx_hook((*fdf)->win, 2, (1L<<0), key_pressed, fdf);
+    	mlx_hook((*fdf)->win, 2, (1L<<0), key_pressed, fdf);
 	mlx_hook((*fdf)->win, 4, (1L<<2), mouse_pressed, fdf);
-	//mlx_hook((*fdf)->win, 17, 0, close_window, fdf);
+	mlx_hook((*fdf)->win, 17, 0, terminate, fdf);
 }
