@@ -10,8 +10,6 @@ static size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-
-
 static char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*sub;
@@ -35,7 +33,6 @@ static char	*ft_substr(char const *s, unsigned int start, size_t len)
 	sub[i] = '\0';
 	return (sub);
 }
-
 
 static int	ft_string_size(char const *str, char c)
 {

@@ -23,6 +23,12 @@ SRCS        :=      draw_map.c \
                           ft_split.c \
                           projection.c \
                           errors.c \
+			controls.c \
+			map_operations.c \
+			converters.c \
+			stack_utils.c \
+			colors_utils.c \
+			print_menu.c
                           
 OBJS        := $(SRCS:.c=.o)
 
