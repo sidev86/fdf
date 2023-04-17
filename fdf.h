@@ -1,12 +1,32 @@
 #ifndef FDF_H
 # define FDF_H
 
-# define		W_WIDTH	1024
+# define		W_WIDTH 1024
 # define		W_HEIGHT 768
 # define		M_WIDTH  250
 
-# define 	COLOR_1  0x009387
-# define		COLOR_2	0XB5EBFD
+# define 	COLOR_1  0X009387
+# define	COLOR_2	0XB5EBFD
+
+
+# define	KEYB_ESC 65307
+# define	KEYB_I 105
+# define	KEYB_P 112
+# define	KEYB_Q 113
+# define	KEYB_E 101
+# define	KEYB_A 97
+# define	KEYB_D 100 
+# define	KEYB_Z 122
+# define	KEYB_C 99
+# define	KEYB_J 106 
+# define	KEYB_L_ARROW 65361 
+# define	KEYB_R_ARROW 65363 
+# define	KEYB_U_ARROW 65362 
+# define	KEYB_D_ARROW 65364 
+# define	KEYB_MINUS 65453 
+# define	KEYB_PLUS 65451
+
+
 
 # define		TXT_COLOR 0XFFFFFF
 # define		MENU_COLOR 0X090A2F
@@ -16,7 +36,7 @@
 # define FT_INT_MIN		((int)(~FT_INT_MAX))
 
 # include "get_next_line.h"
-# include "mlx/mlx.h"
+# include "mlx_linux/mlx.h"
 # include <math.h>
 # include <unistd.h>
 # include <stdio.h>
@@ -102,5 +122,6 @@ void change_gradient_values(t_fdf **fdf);
 int	get_default_color(int z, t_map *map);
 void	print_menu(t_fdf *fdf);
 void change_projection(t_fdf **fdf, int key);
+void    terminate(t_fdf **fdf);
 
 #endif

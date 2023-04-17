@@ -28,7 +28,8 @@ SRCS        :=      draw_map.c \
 			converters.c \
 			stack_utils.c \
 			colors_utils.c \
-			print_menu.c
+			print_menu.c \
+			terminate.c
                           
 OBJS        := $(SRCS:.c=.o)
 

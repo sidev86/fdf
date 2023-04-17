@@ -75,6 +75,7 @@ int read_map(char *path, t_map **map, t_altitudes **alt_stack)
 				line_check(row, alt_stack, *map);
 				(*map)->height++;
 				free_array_split(row);
+				free(maprow);
 			}
 			else
 				break;

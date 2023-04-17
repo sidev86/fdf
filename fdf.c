@@ -24,5 +24,6 @@ int	main(int argc, char **argv)
 		draw_map(fdf, fdf->map);
 		input_controls(&fdf);
 		mlx_loop(fdf->mlx);
+		
 	}	
 }

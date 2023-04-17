@@ -1,6 +1,4 @@
 #include "fdf.h"
-#include "mlx/mlx.h"
-#include <math.h>
 
 void put_pixel(t_fdf *fdf, int x, int y, int color)
 {

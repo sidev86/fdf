@@ -3,24 +3,22 @@
 static int key_pressed(int keycode, t_fdf **fdf)
 {
 	printf("Hai premuto il tasto %d\n", keycode);
-	if (keycode == 2 || keycode == 0 || keycode == 6 
-	|| keycode == 8 || keycode == 12 || keycode == 14)
+	if (keycode == KEYB_Q || keycode == KEYB_E || keycode == KEYB_A 
+	|| keycode == KEYB_D || keycode == KEYB_Z || keycode == KEYB_C)
 		change_camera_angle(fdf, keycode); 
-	else if(keycode == 123 || keycode == 124 || keycode == 125 || keycode == 126)
+	else if (keycode == KEYB_L_ARROW || keycode == KEYB_R_ARROW || 
+	keycode == KEYB_U_ARROW || keycode == KEYB_D_ARROW)
 		move_map(fdf, keycode);
-	else if(keycode == 30 || keycode == 44)
+	else if(keycode == KEYB_MINUS || keycode == KEYB_PLUS)
 		translate_z(fdf, keycode);
-	else if (keycode == 34 || keycode == 35)
+	else if (keycode == KEYB_I || keycode == KEYB_P)
 		change_projection(fdf, keycode); 
-	else if (keycode == 38)
+	else if (keycode == KEYB_J)
 		change_gradient_values(fdf);
-	else if (keycode == 53) //linux -> 65307
+	else if (keycode == KEYB_ESC) //linux -> 65307
 	{
-		mlx_destroy_window((*fdf)->mlx, (*fdf)->win);
-		exit(0); 
+		terminate(fdf);
 	}
-	//mlx_clear_window((*fdf)->mlx, (*fdf)->win);
-	//draw_map(fdf, &(*fdf)->points_map, (*fdf)->map->height, (*fdf)->map->width);
 	return (0); 
 }
 
@@ -51,8 +49,14 @@ static int mouse_pressed(int mousecode, int x, int y, t_fdf **fdf)
 	return (0); 
 }
 
+/*static void close_window(t_fdf **fdf)
+{
+	terminate(fdf);
+}*/
+
 void   input_controls(t_fdf **fdf)
 {
     mlx_hook((*fdf)->win, 2, (1L<<0), key_pressed, fdf);
 	mlx_hook((*fdf)->win, 4, (1L<<2), mouse_pressed, fdf);
+	//mlx_hook((*fdf)->win, 17, 0, close_window, fdf);
 }
