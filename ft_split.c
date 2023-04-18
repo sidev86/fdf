@@ -1,38 +1,4 @@
-#include <stdlib.h>
-
-static size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-
-static char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*sub;
-	size_t	i;
-
-	i = 0;
-	if (!s)
-		return (NULL);
-	if (start > ft_strlen(s))
-		len = 0;
-	if (ft_strlen(s) - start < len)
-		len = ft_strlen(s) - start;
-	sub = malloc(sizeof(char) * (len + 1));
-	if (!sub)
-		return (NULL);
-	while (i < len)
-	{		
-		sub[i] = s[start + i];
-		i++;
-	}
-	sub[i] = '\0';
-	return (sub);
-}
+#include "fdf.h"
 
 static int	ft_string_size(char const *str, char c)
 {
@@ -43,9 +9,9 @@ static int	ft_string_size(char const *str, char c)
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] != c)
+		if (str[i] != c && str[i] != '\n' && str[i])
 		{
-			++len;
+				++len;
 			while (str[i] && str[i] != c)
 				++i;
 		}

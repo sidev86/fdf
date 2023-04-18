@@ -9,27 +9,28 @@
 
 NAME        := fdf
 CC        := gcc
-FLAGS    := -Wall -Wextra -Werror -g
+FLAGS    := -Wall -Wextra -Werror 
 ################################################################################
 #                                 PROGRAM'S SRCS                               #
 ################################################################################
 
 SRCS        :=      draw_map.c \
+                          colors_utils.c \
                           get_next_line_utils.c \
+                          print_menu.c \
                           read_map.c \
                           init.c \
                           fdf.c \
                           get_next_line.c \
+                          stack_utils.c \
+                          controls.c \
                           ft_split.c \
+                          converters.c \
                           projection.c \
+                          terminate.c \
+                          draw_lines_map.c \
+                          map_operations.c \
                           errors.c \
-			controls.c \
-			map_operations.c \
-			converters.c \
-			stack_utils.c \
-			colors_utils.c \
-			print_menu.c \
-			terminate.c
                           
 OBJS        := $(SRCS:.c=.o)
 

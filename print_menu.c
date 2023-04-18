@@ -21,6 +21,6 @@ void	print_menu(t_fdf *fdf)
 	mlx_string_put(mlx, win, 15, y += 30, TXT_COLOR, "RANDOM GRADIENT: J");
 	mlx_string_put(mlx, win, 15, y += 20, TXT_COLOR, "(Only works with maps");
 	mlx_string_put(mlx, win, 15, y += 20, TXT_COLOR, "without color info)");
-	mlx_string_put(mlx, win, W_WIDTH - 110, W_HEIGHT - 30, TXT_COLOR, "by sidev86");
-
+	mlx_string_put(mlx, win, W_WIDTH - 110, W_HEIGHT - 30,
+		TXT_COLOR, "by sidev86");
 }

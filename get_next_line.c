@@ -1,20 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/21 11:19:33 by sibrahim          #+#    #+#             */
-/*   Updated: 2022/11/21 11:37:08 by sibrahim         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 #include <stddef.h>
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 2048
+# define BUFFER_SIZE 200
 #endif
 
 static void	ft_read_buf(char **str, char *buf, int fd)

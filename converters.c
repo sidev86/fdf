@@ -1,12 +1,11 @@
 #include "fdf.h"
 
-
-static int		ft_toupper(int c)
+static int	ft_toupper(int c)
 {
 	if (c >= 'a' && c <= 'z')
-        return (c - 'a' + 'A');
-    else 
-        return (c);
+		return (c - 'a' + 'A');
+	else
+		return (c);
 }
 
 static int	ft_has_prefix(const char *str, int base)
@@ -28,7 +27,7 @@ static int	ft_has_prefix(const char *str, int base)
 	return (0);
 }
 
-static int		ft_isdigit_base(char c, int base)
+static int	ft_isdigit_base(char c, int base)
 {
 	const char	*digits = "0123456789ABCDEF";
 	int			i;
@@ -43,7 +42,7 @@ static int		ft_isdigit_base(char c, int base)
 	return (-1);
 }
 
-int		ft_isnumber(char *str, int base)
+int	ft_isnumber(char *str, int base)
 {
 	size_t		i;
 	size_t		digits;
@@ -65,10 +64,13 @@ int		ft_isnumber(char *str, int base)
 		i++;
 		digits++;
 	}
-	return ((!str[i] && digits) ? 1 : 0);
+	if ((!str[i] || str[i] == '\n') && digits)
+		return (1);
+	else
+		return (0);
 }
 
-int				ft_atoi_base(const char *str, int base)
+int	ft_atoi_base(const char *str, int base)
 {
 	unsigned long	result;
 	size_t			i;
@@ -86,7 +88,12 @@ int				ft_atoi_base(const char *str, int base)
 	else if (base == 8)
 		i++;
 	else if (base == 10 && (str[i] == '-' || str[i] == '+'))
-		sign = (str[i++] == '-') ? -1 : 1;
+	{
+		if (str[i++] == '-')
+			sign = -1;
+		else
+			sign = 1;
+	}
 	while (ft_isdigit_base(str[i], base) >= 0)
 		result = result * base + ft_isdigit_base(str[i++], base);
 	return ((int)(result * sign));

@@ -1,6 +1,6 @@
 #include "fdf.h"
 
-void		push_to_stack(t_altitudes **alt_stack, t_altitudes *new)
+void	push_to_stack(t_altitudes **alt_stack, t_altitudes *new)
 {
 	if (alt_stack)
 	{
@@ -12,7 +12,7 @@ void		push_to_stack(t_altitudes **alt_stack, t_altitudes *new)
 
 t_altitudes	*get_from_stack(t_altitudes **alt_stack)
 {
-	t_altitudes *head;
+	t_altitudes	*head;
 
 	head = NULL;
 	if (alt_stack && *alt_stack)
@@ -33,23 +33,25 @@ void	free_stack(t_altitudes **alt_stack)
 		(*alt_stack) = (*alt_stack)->next;
 		free(tmp);
 	}
-	
 }
 
-void		stack_to_arrays(t_altitudes **alt_stack, t_map *map)
+void	stack_to_arrays(t_altitudes **alt_stack, t_map *map)
 {
-	t_altitudes    *alt_coord;
+	t_altitudes	*alt_coord;
 	ssize_t		i;
 	size_t		arr_size;
 
 	arr_size = map->width * map->height * sizeof(int);
-	if (!(map->alt_arr = (int *)malloc(arr_size)))
-		error_message();
-	if (!(map->color_arr = (int *)malloc(arr_size)))
-		error_message();
+	map->alt_arr = (int *)malloc(arr_size);
+	if (!map->alt_arr)
+		error_message("Memory Allocation Error!");
+	map->color_arr = (int *)malloc(arr_size);
+	if (!map->color_arr)
+		error_message("Memory Allocation Error!");
 	i = map->width * map->height - 1;
-	while ((alt_coord = get_from_stack(alt_stack)) && i >= 0)
+	while (i >= 0)
 	{
+		alt_coord = get_from_stack(alt_stack);
 		map->alt_arr[i] = alt_coord->height;
 		map->color_arr[i] = alt_coord->color;
 		if (alt_coord->height > map->z_max)
