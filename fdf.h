@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fdf.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/19 12:38:55 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/04/19 12:38:56 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FDF_H
 # define FDF_H
 
@@ -6,29 +18,29 @@
 # define M_WIDTH  250
 # define COLOR_1  0X009387
 # define COLOR_2 0XB5EBFD
-# define KEYB_ESC 53
-# define KEYB_I 34
-# define KEYB_P 35
-# define KEYB_Q 12
-# define KEYB_E 14
-# define KEYB_A 0
-# define KEYB_D 2 
-# define KEYB_Z 6
-# define KEYB_C 8
-# define KEYB_J 38 
-# define KEYB_L_ARROW 123 
-# define KEYB_R_ARROW 124 
-# define KEYB_U_ARROW 126 
-# define KEYB_D_ARROW 125 
-# define KEYB_MINUS 44 
-# define KEYB_PLUS 30
+# define KEYB_ESC 65307
+# define KEYB_I 105
+# define KEYB_P 112
+# define KEYB_Q 113
+# define KEYB_E 101
+# define KEYB_A 97
+# define KEYB_D 100
+# define KEYB_Z 122
+# define KEYB_C 99
+# define KEYB_J 106
+# define KEYB_L_ARROW 65361
+# define KEYB_R_ARROW 65363
+# define KEYB_U_ARROW 65362
+# define KEYB_D_ARROW 65364
+# define KEYB_MINUS 65453
+# define KEYB_PLUS 65451
 # define TXT_COLOR 0XFFFFFF
 # define MENU_COLOR 0X090A2F
 # define FT_INT_MAX 2147483647;
 # define FT_INT_MIN -2147483648;
 
 # include "get_next_line.h"
-# include "mlx/mlx.h"
+# include "mlx_linux/mlx.h"
 # include <math.h>
 # include <unistd.h>
 # include <stdlib.h>

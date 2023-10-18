@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_split.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/19 12:24:47 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/04/19 12:24:48 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 static int	ft_string_size(char const *str, char c)
@@ -11,7 +23,7 @@ static int	ft_string_size(char const *str, char c)
 	{
 		if (str[i] != c && str[i] != '\n' && str[i])
 		{
-				++len;
+			++len;
 			while (str[i] && str[i] != c)
 				++i;
 		}
@@ -30,7 +42,7 @@ static char	**ft_create_subs(char **spl, char const *s, char c)
 	size = 0;
 	while (*s)
 	{
-		if (*s != c)
+		if (*s != c && *s != '\n')
 		{
 			size = 0;
 			while (*s && *s != c)

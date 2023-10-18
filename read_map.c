@@ -1,11 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   read_map.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sibrahim <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/19 12:26:36 by sibrahim          #+#    #+#             */
+/*   Updated: 2023/04/19 12:26:37 by sibrahim         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
-#define MAR_W 201
 
 static void	free_array_split(char **arr)
 {
 	size_t	i;
 
 	i = 0;
+	if (arr[i] == NULL && arr[i][0] == '\0')
+		return ;
 	while (arr[i])
 	{
 		free(arr[i]);
@@ -49,7 +62,7 @@ static void	line_check(char **row, t_altitudes **alt_stack, t_map *map)
 	}
 	if (map->height == 0)
 		map->width = width;
-	else if (map->width != width && width != MAR_W)
+	else if (map->width != width)
 		error_message("Error. Wrong Map File Format\n");
 }
 
