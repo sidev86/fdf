@@ -14,7 +14,7 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
 
 <h2>Understanding the <code>.fdf</code> File Format</h2>
 
-  <p>The <code>.fdf</code> file contains the data that describes the 3D coordinates of a landscape. Each number in the file represents a point in space and corresponds to specific coordinates along the x, y, and z axes. The format is designed to be simple, and each value represents the altitude of a point in a grid, while the position of the value itself corresponds to the x and y coordinates.</p>
+  <p>The <strong><code>.fdf</code></strong> file contains the data that describes the 3D coordinates of a landscape. Each number in the file represents a point in space and corresponds to specific coordinates along the x, y, and z axes. The format is designed to be simple, and each value represents the altitude of a point in a grid, while the position of the value itself corresponds to the x and y coordinates.</p>
 
   <h3>File structure</h3>
   <ul>
@@ -37,7 +37,7 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
   </ul>
 
   <h3>How It Works</h3>
-  <p>When the <code>.fdf</code> file is loaded into the <code>fdf</code> program:</p>
+  <p>When the <strong><code>.fdf</code></strong> file is loaded into the <strong><code>.fdf</code></strong> program:</p>
   <ol>
     <li>Each number is read and interpreted as the altitude (z) at that specific (x, y) position.</li>
     <li>The program creates a 3D wireframe model by connecting each point using line segments (edges) based on the coordinates and altitude values.</li>
