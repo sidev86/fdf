@@ -52,7 +52,7 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
     <thead>
       <tr>
         <th>Action</th>
-        <th>Control</th>
+        <th>Key Control</th>
       </tr>
     </thead>
     <tbody>
@@ -86,6 +86,15 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
       </tr>
     </tbody>
   </table>
+
+ <h2>Usage (linux systems)</h2>
+ <ol>
+   <li>Go into the minilibx_linux folder and type <code>make</code> to compile the minilibx library</li>
+   <li>Go back to the previous folder and type <code>make</code> to generate the <code>fdf</code> executable file</li>
+   <li>After compiling, execute the program by passing the path to your <code>.fdf</code> file as an argument. For example:</li>
+    <pre><code>./fdf path/to/your_file.fdf</code></pre>
+ </ol>
+ 
 
 
 
