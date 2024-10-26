@@ -46,7 +46,46 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
 
   <p>This simple file format allows you to define and visualize landscapes using just a grid of numbers, making it easy to create 3D models based on elevation data.</p>
 
-
+ 
+ <h2>Controls</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Action</th>
+        <th>Control</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Zoom</td>
+        <td>Mouse Scroll</td>
+      </tr>
+      <tr>
+        <td>Change Altitude</td>
+        <td>+ / -</td>
+      </tr>
+      <tr>
+        <td>X-Axis Rotation</td>
+        <td>Q / E</td>
+      </tr>
+      <tr>
+        <td>Y-Axis Rotation</td>
+        <td>A / D</td>
+      </tr>
+      <tr>
+        <td>Z-Axis Rotation</td>
+        <td>Z / C</td>
+      </tr>
+      <tr>
+        <td>Change Projection (Isometric/Parallel)</td>
+        <td>I / P</td>
+      </tr>
+      <tr>
+        <td>Generate a Random Gradient Color</td>
+        <td>J</td>
+      </tr>
+    </tbody>
+  </table>
 
 
 
