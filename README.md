@@ -24,7 +24,7 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
   </ul>
 
   <p>For example, consider the following <code>.fdf</code> file:</p>
-  <pre><code>0 0 0 0
+  <pre><code>  0 0 0 0
   0 1 1 0
   0 1 0 0
   0 0 0 0</code></pre>
