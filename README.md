@@ -13,7 +13,7 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
 </ul>
 
  <h2>The <code>.fdf</code> File Format </h2>
-  <p>The <code>.fdf</code> file is basically the map represantation in the form of a grid of points where:</p>
+  <p>The <code>.fdf</code> file is basically the map representation in the form of a grid of points where:</p>
   <ul>
     <li>Horizontal position corresponds to the x-axis.</li>
     <li>Vertical position corresponds to the y-axis.</li>
