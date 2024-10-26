@@ -96,6 +96,3 @@ FDF is a simple wireframe model renderer designed to represent 3D landscapes. Th
    <li>After compiling, execute the program by passing the path to your <strong><code>.fdf</code></strong> file as an argument. For example:</li>
     <pre><code>./fdf path/to/your_file.fdf</code></pre>
 
-
-
-README WIP...
